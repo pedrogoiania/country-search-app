@@ -1,0 +1,22 @@
+{
+  "presets": ["module:metro-react-native-babel-preset"],
+  "plugins": [
+    [
+      "babel-plugin-inline-import",
+      {
+        "extensions": [".svg", ".png"]
+      }
+    ],
+    [
+      "module-resolver",
+      {
+        "root": ["./src"],
+        "alias": {
+          "screens": "./src/screens",
+          "components": "./src/components",
+          "test": "./__tests__"
+        }
+      }
+    ]
+  ]
+}
