@@ -1,21 +1,14 @@
 import React from 'react';
-import { View } from 'react-native';
 
-import colors from './components/colors';
-import Text from './components/Text';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+import Home from './screens/home';
 
 function App() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: colors.primary.blue,
-      }}
-    >
-      <Text.Bold>App</Text.Bold>
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Home />
+    </GestureHandlerRootView>
   );
 }
 
