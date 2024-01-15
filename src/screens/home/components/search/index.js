@@ -1,13 +1,43 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import BottomSheet, { BottomSheetTextInput, BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import colors from '../../../../components/colors';
 import Text from '../../../../components/Text';
+import strings from '../../../../utils/strings';
+import ResultItem from './components/ResultItem';
+import Separator from '../../../../components/Separator';
+
+const styles = StyleSheet.create({
+  bottomSheetBackgroundStyle: {
+    backgroundColor: colors.primary.blue,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bottomSheetStyle: { marginHorizontal: 10, overflow: 'hidden' },
+  bottomSheetHiddenStyle: { overflow: 'hidden' },
+
+  contentStyle: {
+    flex: 1,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+
+  inputStyle: {
+    height: 56,
+    color: colors.primary.white,
+    width: '100%',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
 
 function Search({ onChangeText, results, searchTextValue }) {
   const bottomSheetRef = useRef(null);
   const inputTextRef = useRef(null);
+
+  const initialSnapPointValue = 0;
+  const bottomSheetBottomInset = 40;
 
   const [snapPoints, setSnapPoints] = useState([60]);
   const [margin, setMargin] = useState(0);
@@ -38,66 +68,47 @@ function Search({ onChangeText, results, searchTextValue }) {
     }
   }, []);
 
+  const onFocus = () => {
+    setFullBottomSheet();
+  };
+
+  const onBlur = () => {
+    setSmallBottomSheet();
+  };
+
+  const renderItem = ({ item }) => <ResultItem item={item} />;
+
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      index={0}
+      index={initialSnapPointValue}
       detached
-      bottomInset={40}
+      bottomInset={bottomSheetBottomInset}
       snapPoints={snapPoints}
       onClose={setSmallBottomSheet}
-      style={{ marginHorizontal: 10, overflow: 'hidden' }}
+      style={styles.bottomSheetStyle}
       onChange={handleSheetChanges}
-      containerStyle={{ overflow: 'hidden' }}
-      handleStyle={{ overflow: 'hidden' }}
-      backgroundStyle={{
-        backgroundColor: colors.primary.blue,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: margin,
-      }}
+      containerStyle={styles.bottomSheetHiddenStyle}
+      handleStyle={styles.bottomSheetHiddenStyle}
+      backgroundStyle={[styles.bottomSheetBackgroundStyle, { marginBottom: margin }]}
       handleComponent={null}
     >
-      <View
-        style={{
-          flex: 1,
-          paddingHorizontal: 10,
-          marginBottom: 10,
-        }}
-      >
+      <View style={styles.contentStyle}>
         <BottomSheetTextInput
           ref={inputTextRef}
-          placeholder="Type here to search"
+          placeholder={strings.home.searchPlaceHolder}
           placeholderTextColor={colors.primary.gray}
           onChangeText={onChangeText}
           value={searchTextValue}
-          style={{
-            height: 56,
-            color: colors.primary.white,
-            width: '100%',
-            fontSize: 18,
-            fontWeight: 'bold',
-          }}
-          onFocus={() => {
-            setFullBottomSheet();
-          }}
-          onBlur={() => {
-            setSmallBottomSheet();
-          }}
+          style={styles.inputStyle}
+          onFocus={onFocus}
+          onBlur={onBlur}
         />
 
         <BottomSheetFlatList
           data={results}
-          ItemSeparatorComponent={<View style={{ height: 10 }} />}
-          renderItem={({ item }) => {
-            return (
-              <View>
-                <Text
-                  style={{ fontSize: 18 }}
-                >{`${item.flag} ${item.name.common} - ${item.subregion}`}</Text>
-              </View>
-            );
-          }}
+          ItemSeparatorComponent={<Separator />}
+          renderItem={renderItem}
         />
       </View>
     </BottomSheet>

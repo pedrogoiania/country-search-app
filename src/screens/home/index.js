@@ -7,6 +7,8 @@ import useHomeIteractor from '../../iteractors/home';
 import useIsTyping from '../../utils/hooks/typing';
 import { FlatList } from 'react-native-gesture-handler';
 import { Pressable, View } from 'react-native';
+import strings from '../../utils/strings';
+import Separator from '../../components/Separator';
 
 function Home() {
   const { countries, recentSearchs, findCountries } = useHomeIteractor();
@@ -29,17 +31,17 @@ function Home() {
 
   return (
     <BaseView>
-      <Text.Bold style={{ fontSize: 32 }}>Country Seach App</Text.Bold>
+      <Text.Bold style={{ fontSize: 32 }}>{strings.home.title}</Text.Bold>
 
       {recentSearchs.length ? (
         <FlatList
           data={recentSearchs}
           ListHeaderComponent={
             <View style={{ marginVertical: 10 }}>
-              <Text style={{ fontSize: 24 }}>Recent Searchs</Text>
+              <Text style={{ fontSize: 24 }}>{strings.home.recentTitle}</Text>
             </View>
           }
-          ItemSeparatorComponent={<View style={{ height: 10 }} />}
+          ItemSeparatorComponent={<Separator />}
           renderItem={({ item }) => (
             <Pressable
               onPress={() => {
