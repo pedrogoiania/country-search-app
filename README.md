@@ -1,6 +1,8 @@
 # Country Seach App
 
-![Alt Text](countrysearch.gif)
+<!-- ![Alt Text](countrysearch.gif) -->
+
+<img src="countrysearch.gif" alt="Country Search App GIF example" width="150"/>
 
 This app it's an experimental to test https://restcountries.com/ APIs.
 
