@@ -14,7 +14,12 @@ function Text(props) {
   const { children } = props;
 
   return (
-    <RNText {...props} style={{ ...styles.text, ...props.style }}>
+    <RNText
+      numberOfLines={1}
+      ellipsizeMode="tail"
+      {...props}
+      style={{ ...styles.text, ...props.style }}
+    >
       {children}
     </RNText>
   );

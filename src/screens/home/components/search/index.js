@@ -1,23 +1,28 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { ImageBackground, TextInput, View } from 'react-native';
 
-import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetTextInput, BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import colors from '../../../../components/colors';
+import Text from '../../../../components/Text';
 
-function Search() {
+function Search({ onChangeText, results }) {
   const bottomSheetRef = useRef(null);
 
   const [snapPoints, setSnapPoints] = useState([60]);
   const [margin, setMargin] = useState(0);
 
+  const [showFlatList, setShowFlatList] = useState(false);
+
   const setFullBottomSheet = () => {
     setMargin(15);
     setSnapPoints(['40%']);
+    setShowFlatList(true);
   };
 
   const setSmallBottomSheet = () => {
     setMargin(0);
     setSnapPoints([60]);
+    setShowFlatList(false);
 
     bottomSheetRef.current.collapse();
   };
@@ -28,8 +33,6 @@ function Search() {
 
   // callbacks
   const handleSheetChanges = useCallback((index) => {
-    console.log('handleSheetChanges', index);
-
     if (index === 0) {
       setSmallBottomSheet();
     }
@@ -66,16 +69,37 @@ function Search() {
         <BottomSheetTextInput
           placeholder="Type here"
           placeholderTextColor={colors.primary.gray}
+          onChangeText={onChangeText}
           style={{
             height: 56,
             color: colors.primary.white,
             width: '100%',
+            fontSize: 18,
+            fontWeight: 'bold',
           }}
           onFocus={() => {
             setFullBottomSheet();
           }}
           onBlur={() => {
             setSmallBottomSheet();
+          }}
+        />
+
+        {/* {showFlatList ? (
+          
+        ) : null} */}
+
+        <BottomSheetFlatList
+          data={results}
+          ItemSeparatorComponent={<View style={{ height: 10 }} />}
+          renderItem={({ item }) => {
+            return (
+              <View>
+                <Text
+                  style={{ fontSize: 18 }}
+                >{`${item.flag} ${item.name.common} - ${item.subregion}`}</Text>
+              </View>
+            );
           }}
         />
       </View>

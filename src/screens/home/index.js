@@ -1,32 +1,30 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { ImageBackground, TextInput, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 
-import BottomSheet, { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-
-import colors from '../../components/colors';
 import Text from '../../components/Text';
 import BaseView from '../../components/BaseView';
 import Search from './components/search';
-
-const background = require('../../assets/home-background.png');
+import useHomeIteractor from '../../iteractors/home';
+import useIsTyping from '../../utils/hooks/typing';
 
 function Home() {
-  const bottomSheetRef = useRef(null);
+  const { countries, findCountries } = useHomeIteractor();
 
-  const [snapPoints, setSnapPoints] = useState([60]);
+  const callApi = (value) => {
+    findCountries(value);
+  };
 
-  // variables
+  const { setPartialString } = useIsTyping(callApi);
 
-  // callbacks
-  const handleSheetChanges = useCallback((index) => {
-    console.log('handleSheetChanges', index);
-  }, []);
+  const onChangeText = (text) => {
+    console.log(text);
+    setPartialString(text);
+  };
 
   return (
     <BaseView style={{ justifyContent: 'center', alignItems: 'center' }}>
       <Text.Bold>App</Text.Bold>
 
-      <Search />
+      <Search onChangeText={onChangeText} results={countries} />
     </BaseView>
   );
 }
