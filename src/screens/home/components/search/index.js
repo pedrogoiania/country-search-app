@@ -7,6 +7,7 @@ import Text from '../../../../components/Text';
 
 function Search({ onChangeText, results, searchTextValue }) {
   const bottomSheetRef = useRef(null);
+  const inputTextRef = useRef(null);
 
   const [snapPoints, setSnapPoints] = useState([60]);
   const [margin, setMargin] = useState(0);
@@ -26,6 +27,8 @@ function Search({ onChangeText, results, searchTextValue }) {
   useEffect(() => {
     if (searchTextValue) {
       setFullBottomSheet();
+
+      inputTextRef.current.focus();
     }
   }, [searchTextValue]);
 
@@ -63,6 +66,7 @@ function Search({ onChangeText, results, searchTextValue }) {
         }}
       >
         <BottomSheetTextInput
+          ref={inputTextRef}
           placeholder="Type here to search"
           placeholderTextColor={colors.primary.gray}
           onChangeText={onChangeText}
