@@ -26,7 +26,7 @@ function Text(props) {
 }
 
 const Bold = (props) => {
-  return <Text {...props} />;
+  return <Text {...props} style={{ fontWeight: 'bold', ...props.style }} />;
 };
 
 Text.Bold = Bold;

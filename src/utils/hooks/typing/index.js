@@ -19,7 +19,7 @@ const useIsTyping = (callback) => {
     }
 
     userIsTypingInterval = setInterval(() => {
-      if (partialString === '') {
+      if (String(partialString).trim() === '') {
         lastWordChecked = '';
         callback && callback(lastWordChecked);
         setTyping(false);
@@ -33,6 +33,8 @@ const useIsTyping = (callback) => {
       }
 
       if (lastWordChecked === partialString) {
+        console.log({ partialString, lastWordChecked });
+
         callback && callback(lastWordChecked);
         setTyping(false);
         clearInterval(userIsTypingInterval);

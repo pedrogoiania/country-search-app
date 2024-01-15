@@ -1,37 +1,34 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { ImageBackground, TextInput, View } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { View } from 'react-native';
 
 import BottomSheet, { BottomSheetTextInput, BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import colors from '../../../../components/colors';
 import Text from '../../../../components/Text';
 
-function Search({ onChangeText, results }) {
+function Search({ onChangeText, results, searchTextValue }) {
   const bottomSheetRef = useRef(null);
 
   const [snapPoints, setSnapPoints] = useState([60]);
   const [margin, setMargin] = useState(0);
 
-  const [showFlatList, setShowFlatList] = useState(false);
-
   const setFullBottomSheet = () => {
     setMargin(15);
     setSnapPoints(['40%']);
-    setShowFlatList(true);
   };
 
   const setSmallBottomSheet = () => {
     setMargin(0);
     setSnapPoints([60]);
-    setShowFlatList(false);
 
     bottomSheetRef.current.collapse();
   };
 
-  //   const snapPoints = useMemo(() => [60, '40%'], []);
+  useEffect(() => {
+    if (searchTextValue) {
+      setFullBottomSheet();
+    }
+  }, [searchTextValue]);
 
-  // variables
-
-  // callbacks
   const handleSheetChanges = useCallback((index) => {
     if (index === 0) {
       setSmallBottomSheet();
@@ -48,7 +45,6 @@ function Search({ onChangeText, results }) {
       onClose={setSmallBottomSheet}
       style={{ marginHorizontal: 10, overflow: 'hidden' }}
       onChange={handleSheetChanges}
-      //   handleIndicatorStyle={{ display: 'none' }}
       containerStyle={{ overflow: 'hidden' }}
       handleStyle={{ overflow: 'hidden' }}
       backgroundStyle={{
@@ -67,9 +63,10 @@ function Search({ onChangeText, results }) {
         }}
       >
         <BottomSheetTextInput
-          placeholder="Type here"
+          placeholder="Type here to search"
           placeholderTextColor={colors.primary.gray}
           onChangeText={onChangeText}
+          value={searchTextValue}
           style={{
             height: 56,
             color: colors.primary.white,
@@ -84,10 +81,6 @@ function Search({ onChangeText, results }) {
             setSmallBottomSheet();
           }}
         />
-
-        {/* {showFlatList ? (
-          
-        ) : null} */}
 
         <BottomSheetFlatList
           data={results}
